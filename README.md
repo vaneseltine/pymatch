@@ -18,7 +18,7 @@ Install through pip!
 $ pip install pymatch
 ```
 
-# 
+#
 
 The best way to get familiar with the package is to work through an example. The example below leaves out much of the theory behind matching and focuses on the application within `pymatch`. If interested, Sekhon gives a nice overview in his [Introduction to the Matching package in R](http://sekhon.berkeley.edu/papers/MatchingJSS.pdf).
 
@@ -88,14 +88,14 @@ control['loan_status'] = 0
 
 ### `Matcher`
 
-Initialize the `Matcher` object. 
+Initialize the `Matcher` object.
 
 **Note that:**
 
-* Upon initialization, `Matcher` prints the formula used to fit logistic regression model(s) and the number of records in the majority/minority class. 
-    * The regression model(s) are used to generate propensity scores. In this case, we are using the covariates on the right side of the equation to estimate the probability of defaulting on a loan (`loan_status`= 1). 
-* `Matcher` will use all covariates in the dataset unless a formula is specified by the user. Note that this step is only fitting model(s), we assign propensity scores later. 
-* Any covariates passed to the (optional) `exclude` parameter will be ignored from the model fitting process. This parameter is particularly useful for unique identifiers like a `user_id`. 
+* Upon initialization, `Matcher` prints the formula used to fit logistic regression model(s) and the number of records in the majority/minority class.
+    * The regression model(s) are used to generate propensity scores. In this case, we are using the covariates on the right side of the equation to estimate the probability of defaulting on a loan (`loan_status`= 1).
+* `Matcher` will use all covariates in the dataset unless a formula is specified by the user. Note that this step is only fitting model(s), we assign propensity scores later.
+* Any covariates passed to the (optional) `exclude` parameter will be ignored from the model fitting process. This parameter is particularly useful for unique identifiers like a `user_id`.
 
 
 ```python
@@ -136,7 +136,7 @@ m.plot_scores()
 ```
 
 
-![png](Example_files/Example_15_0.png)
+![png](example_files/Example_15_0.png)
 
 
 The plot above demonstrates the separability present in our data. Test profiles have a much higher **propensity**, or estimated probability of defaulting given the features we isolated in the data.
@@ -145,13 +145,13 @@ The plot above demonstrates the separability present in our data. Test profiles 
 
 ### Tune Threshold
 
-The `Matcher.match()` method matches profiles that have propensity scores within some threshold. 
+The `Matcher.match()` method matches profiles that have propensity scores within some threshold.
 
 i.e. for two scores `s1` and `s2`, `|s1 - s2|` <= `threshold`
 
 By default matches are found *from* the majority group *for* the minority group. For example, if our test group contains 1,000 records and our control group contains 20,000, `Matcher` will
     iterate through the test (minority) group and find suitable matches from the control (majority) group. If a record in the minority group has no suitable matches, it is dropped from the final matched dataset. We need to ensure our threshold is small enough such that we get close matches and retain most (or all) of our data in the minority group.
-    
+
 Below we tune the threshold using `method="random"`. This matches a random profile that is within the threshold
 as there could be many. This is much faster than the alternative method "min", which finds the *closest* match for every minority record.
 
@@ -161,7 +161,7 @@ m.tune_threshold(method='random')
 ```
 
 
-![png](Example_files/Example_19_0.png)
+![png](example_files/Example_19_0.png)
 
 
 It looks like a threshold of 0.0001 retains 100% of our data. Let's proceed with matching using this threshold.
@@ -229,7 +229,7 @@ It looks like the bulk of our matched-majority-group records occur only once, 68
 m.assign_weight_vector()
 ```
 
-Let's take a look at our matched data thus far. Note that in addition to the weight vector, `Matcher` has also assigned a `match_id` to each record indicating our (in this cased) *paired* matches since we use `nmatches=1`. We can verify that matched records have `scores` within 0.0001 of each other. 
+Let's take a look at our matched data thus far. Note that in addition to the weight vector, `Matcher` has also assigned a `match_id` to each record indicating our (in this cased) *paired* matches since we use `nmatches=1`. We can verify that matched records have `scores` within 0.0001 of each other.
 
 
 ```python
@@ -371,7 +371,7 @@ We must now determine if our data is "balanced" across our covariates. Can we de
 
 ___categorical___
 
-For categorical variables, we look at plots comparing the proportional differences between test and control before and after matching. 
+For categorical variables, we look at plots comparing the proportional differences between test and control before and after matching.
 
 For example, the first plot shows:
 
@@ -384,15 +384,15 @@ categorical_results = m.compare_categorical(return_table=True)
 ```
 
 
-![png](Example_files/Example_32_0.png)
+![png](example_files/Example_32_0.png)
 
 
 
-![png](Example_files/Example_32_1.png)
+![png](example_files/Example_32_1.png)
 
 
 
-![png](Example_files/Example_32_2.png)
+![png](example_files/Example_32_2.png)
 
 
 
@@ -454,11 +454,11 @@ For example, the first plot pair shows:
             This test statistic is calculated on 1000
             permuted samples of the data, generating
             an imperical p-value.  See `pymatch.functions.ks_boot()`
-            This is an adaptation of the [`ks.boot()`](https://www.rdocumentation.org/packages/Matching/versions/4.9-2/topics/ks.boot) method in 
+            This is an adaptation of the [`ks.boot()`](https://www.rdocumentation.org/packages/Matching/versions/4.9-2/topics/ks.boot) method in
             the R "Matching" package
         * Chi-Square Distance:
-            Similarly this distance metric is calculated on 
-            1000 permuted samples. 
+            Similarly this distance metric is calculated on
+            1000 permuted samples.
             See `pymatch.functions.grouped_permutation_test()`
 
     * Other included Stats:
@@ -473,23 +473,23 @@ cc = m.compare_continuous(return_table=True)
 ```
 
 
-![png](Example_files/Example_35_0.png)
+![png](example_files/Example_35_0.png)
 
 
 
-![png](Example_files/Example_35_1.png)
+![png](example_files/Example_35_1.png)
 
 
 
-![png](Example_files/Example_35_2.png)
+![png](example_files/Example_35_2.png)
 
 
 
-![png](Example_files/Example_35_3.png)
+![png](example_files/Example_35_3.png)
 
 
 
-![png](Example_files/Example_35_4.png)
+![png](example_files/Example_35_4.png)
 
 
 

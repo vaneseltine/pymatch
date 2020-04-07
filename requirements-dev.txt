@@ -1,5 +1,14 @@
+# Install via
+# python -m pip install --upgrade -r ./requirements-dev.txt
+
+-r requirements.txt
+pip
+setuptools
 black
 pylint
 flake8
 jupyter
 jupyter_contrib_nbextensions
+# jupyter contrib nbextension install --user
+# jupyter nbextension enable notify/notify
+# jupyter nbextension enable execute_time/ExecuteTime
